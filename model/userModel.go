@@ -1,8 +1,9 @@
 package model
 
-type User struct {
-	Userid   uint   `json:"userid" bson:"userid"`
-	Fullname string `json:"fullname" bson:"fullname"`
-	Username string `json:"username" bson:"username"`
-	Password string `json:"password" bson:"password"`
+type TbUsers struct {
+	Userid    uint   `json:"user_id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
 }

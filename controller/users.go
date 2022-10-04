@@ -1,7 +1,19 @@
 package controller
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"webApp/model"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func GetUsers(c *fiber.Ctx) error {
-	return nil
+	userModel := []model.TbUsers{}
+
+	DBConn.Debug().Table("tb_users").Find(&userModel)
+
+	// return c.JSON(userModel)
+	return c.Render("index", fiber.Map{
+		"users": userModel,
+	})
+
 }
