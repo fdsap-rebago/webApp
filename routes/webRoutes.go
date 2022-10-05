@@ -12,4 +12,6 @@ func AppRoutes(app *fiber.App) {
 	//User
 	userEndpoint := apiEndpoint.Group("/user")
 	userEndpoint.Get("/get_user", controller.GetUsers)
+	userEndpoint.Post("/login", controller.ViewLogin)
+	userEndpoint.Post("/verify", controller.VerifyAccount)
 }

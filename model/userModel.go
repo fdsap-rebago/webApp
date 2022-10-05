@@ -6,4 +6,5 @@ type TbUsers struct {
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
+	Branch    string `json:"branch"`
 }
