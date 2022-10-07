@@ -9,9 +9,9 @@ import (
 func AppRoutes(app *fiber.App) {
 	apiEndpoint := app.Group("/api")
 
+	apiEndpoint.Get("/login", controller.ViewLogin)
+	apiEndpoint.Post("/verify", controller.VerifyAccount)
 	//User
 	userEndpoint := apiEndpoint.Group("/user")
-	userEndpoint.Get("/get_user", controller.GetUsers)
-	userEndpoint.Post("/login", controller.ViewLogin)
-	userEndpoint.Post("/verify", controller.VerifyAccount)
+	userEndpoint.Post("/test", controller.Test)
 }

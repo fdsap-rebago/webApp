@@ -7,21 +7,20 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetUsers(c *fiber.Ctx) error {
+func GetUsers(c *fiber.Ctx, branch string) error {
 	userModel := []model.TbUsers{}
 
-	DBConn.Debug().Table("tb_users").Find(&userModel)
-
+	DBConn.Debug().Table(branch + ".tb_users").Find(&userModel)
 	// return c.JSON(userModel)
-	return c.Render("index", fiber.Map{
+	return c.Render("users", fiber.Map{
 		"users": userModel,
+		"title": branch,
 	})
-
 }
 
 func ViewLogin(c *fiber.Ctx) error {
 	return c.Render("login", fiber.Map{
-		"Title": "Login",
+		"Title": "User Login",
 	})
 }
 
@@ -37,14 +36,19 @@ func VerifyAccount(c *fiber.Ctx) error {
 	if userModel.Username == "" {
 		DBConn.Debug().Table("rbi.tb_users").Where("username=?", log.Username).Find(&userModel)
 		if userModel.Username == "" {
-			return c.SendString("user not found")
+			DBConn.Debug().Table("sme.tb_users").Where("username=?", log.Username).Find(&userModel)
+			if userModel.Username == "" {
+				c.SendString("user not found")
+			}
 		}
 	}
-	fmt.Println("usermodel:", userModel)
-	return c.JSON(userModel)
+
+	fmt.Println("Branch:", userModel.Branch)
+	GetUsers(c, userModel.Branch)
+
+	return nil
 }
 
-/*
-"branch":"rbi"
-
-*/
+func Test(c *fiber.Ctx) error {
+	return nil
+}

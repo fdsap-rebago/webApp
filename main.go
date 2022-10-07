@@ -25,7 +25,6 @@ func main() {
 	}))
 
 	// Declare & initialize logger
-
 	routes.AppRoutes(app)
 
 	log.Fatal(app.Listen(":3000"))
