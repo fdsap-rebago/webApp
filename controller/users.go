@@ -1,54 +1,56 @@
 package controller
 
 import (
-	"fmt"
+	"net/http"
+	"strconv"
 	"webApp/model"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetUsers(c *fiber.Ctx, branch string) error {
-	userModel := []model.TbUsers{}
+// CONTROLLER
+func RegisterAccount(c *fiber.Ctx) error {
+	// Get value from input tags
+	ic := c.FormValue("instiCode")
+	fn := c.FormValue("firstname")
+	ln := c.FormValue("lastname")
+	un := c.FormValue("username")
+	pw := c.FormValue("password")
 
-	DBConn.Debug().Table(branch + ".tb_users").Find(&userModel)
-	// return c.JSON(userModel)
-	return c.Render("users", fiber.Map{
-		"users": userModel,
-		"title": branch,
-	})
-}
+	cic, _ := strconv.Atoi(ic)
 
-func ViewLogin(c *fiber.Ctx) error {
-	return c.Render("login", fiber.Map{
-		"Title": "User Login",
-	})
-}
-
-type LoginingIn struct {
-	Username string `json:"username"`
-}
-
-func VerifyAccount(c *fiber.Ctx) error {
-	userModel := model.TbUsers{}
-	log := LoginingIn{}
-	log.Username = c.FormValue("username")
-	DBConn.Debug().Table("tb_users").Where("username=?", log.Username).Find(&userModel)
-	if userModel.Username == "" {
-		DBConn.Debug().Table("rbi.tb_users").Where("username=?", log.Username).Find(&userModel)
-		if userModel.Username == "" {
-			DBConn.Debug().Table("sme.tb_users").Where("username=?", log.Username).Find(&userModel)
-			if userModel.Username == "" {
-				c.SendString("user not found")
-			}
-		}
+	userModel := model.TbUsers{
+		Firstname: fn,
+		Lastname:  ln,
+		Username:  un,
+		Password:  pw,
+		InstiCode: cic,
 	}
 
-	fmt.Println("Branch:", userModel.Branch)
-	GetUsers(c, userModel.Branch)
+	if creatErr := DBConn.Debug().Table("tbl_users").Create(&userModel).Error; creatErr != nil {
+		return creatErr
+	}
 
-	return nil
+	return c.Render("login", fiber.Map{
+		"status": http.StatusOK,
+	})
+
 }
 
-func Test(c *fiber.Ctx) error {
-	return nil
+// VIEWS
+func ViewLogin(c *fiber.Ctx) error {
+	return c.Render("login", fiber.Map{
+		"title": "USER LOGIN",
+	})
+}
+
+func ViewRegistration(c *fiber.Ctx) error {
+	instiModel := []model.M_Institution{}
+
+	DBConn.Debug().Table("m_institution").Find(&instiModel)
+
+	return c.Render("registration", fiber.Map{
+		"title":        "USER REGISTRATION",
+		"institutions": instiModel,
+	})
 }

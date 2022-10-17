@@ -18,6 +18,11 @@ func main() {
 		Views: html.New("./template/views", ".html"),
 	})
 
+	// Load static files like CSS, Images & JavaScript
+	app.Static("/", "./template/css")
+	app.Static("/", "./template/js")
+	app.Static("/", "./template/images")
+
 	// Configure application CORS
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",

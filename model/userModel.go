@@ -1,11 +1,15 @@
 package model
 
 type TbUsers struct {
-	Userid    uint   `json:"user_id"`
+	Uid       uint   `json:"uid" gorm:"primaryKey"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
-	Email     string `json:"email"`
 	Username  string `json:"username"`
-	RoleId    string `json:"role_id"`
-	Branch    string `json:"branch"`
+	Password  string `json:"password"`
+	InstiCode int    `json:"insti_code"`
+}
+
+type M_Institution struct {
+	InstiCode uint   `json:"insti_code"`
+	InstiDesc string `json:"insti_desc"`
 }
