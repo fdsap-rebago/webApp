@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"strconv"
+	"webApp/controller/util"
 	"webApp/model"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,31 +12,119 @@ import (
 
 // CONTROLLER
 func RegisterAccount(c *fiber.Ctx) error {
+
+	log.Println("Registration")
 	// Get value from input tags
 	ic := c.FormValue("instiCode")
 	fn := c.FormValue("firstname")
 	ln := c.FormValue("lastname")
 	un := c.FormValue("username")
 	pw := c.FormValue("password")
+	cpw := c.FormValue("confirmPassword")
 
 	cic, _ := strconv.Atoi(ic)
 
-	userModel := model.TbUsers{
-		Firstname: fn,
-		Lastname:  ln,
-		Username:  un,
-		Password:  pw,
-		InstiCode: cic,
+	// Initiate Institutions
+	instiModel := []model.M_Institution{}
+	DBConn.Debug().Table("m_institution").Find(&instiModel)
+
+	// Password not match
+	if pw != cpw {
+		instiModel := []model.M_Institution{}
+		DBConn.Debug().Table("m_institution").Find(&instiModel)
+
+		return c.Render("registration", fiber.Map{
+			"iconDesc":     "error",
+			"title":        "USER REGISTRATION",
+			"statusCode":   http.StatusUnprocessableEntity,
+			"statusDesc":   "Password not match",
+			"institutions": instiModel,
+			"firstname":    fn,
+			"lastname":     ln,
+			"username":     un,
+			"insticode":    ic,
+		})
 	}
 
-	if creatErr := DBConn.Debug().Table("tbl_users").Create(&userModel).Error; creatErr != nil {
-		return creatErr
+	// if fields are empty
+	if fn == "" || ln == "" || un == "" || pw == "" || ic == "" {
+
+		return c.Render("registration", fiber.Map{
+			"iconDesc":     "error",
+			"title":        "USER REGISTRATION",
+			"statusCode":   http.StatusUnprocessableEntity,
+			"statusDesc":   "Registration failed, please fill out the fields",
+			"institutions": instiModel,
+			"firstname":    fn,
+			"lastname":     ln,
+			"username":     un,
+			"insticode":    ic,
+		})
+
+	} else {
+		hashPW, _ := util.HashPassword(pw)
+
+		// store data
+		userModel := model.TbUsers{
+			Firstname: fn,
+			Lastname:  ln,
+			Username:  un,
+			Password:  hashPW,
+			InstiCode: cic,
+		}
+
+		result := DBConn.Debug().Table("tbl_users").Where("username = ?", un).FirstOrCreate(&userModel)
+
+		if result.RowsAffected == 0 {
+			return c.Render("registration", fiber.Map{
+				"iconDesc":     "error",
+				"title":        "USER REGISTRATION",
+				"statusCode":   http.StatusUnprocessableEntity,
+				"statusDesc":   "Registration failed, user already exist",
+				"institutions": instiModel,
+				"firstname":    fn,
+				"lastname":     ln,
+				"username":     un,
+				"insticode":    ic,
+			})
+		}
+
+		return c.Render("login", fiber.Map{
+			"iconDesc":   "success",
+			"title":      "USER LOGIN",
+			"statusCode": http.StatusOK,
+			"statusDesc": "Registration successful",
+		})
+	}
+}
+
+func VerifyAccount(c *fiber.Ctx) error {
+	userModel := model.TbUsers{}
+
+	un := c.FormValue("username")
+	pw := c.FormValue("password")
+
+	log.Println(DBConn.Debug().Table("tbl_users").Where("username = ?", un).Find(&userModel))
+
+	result := util.CheckPasswordHash(pw, userModel.Password)
+
+	if result {
+		return c.Render("dashboard", fiber.Map{
+			"iconDesc":   "success",
+			"title":      "DASHBOARD",
+			"statusCode": http.StatusOK,
+			"statusDesc": "Account Verified",
+			"username":   un,
+		})
 	}
 
 	return c.Render("login", fiber.Map{
-		"status": http.StatusOK,
+		"iconDesc":   "error",
+		"title":      "USER LOGIN",
+		"statusCode": http.StatusUnauthorized,
+		"statusDesc": "Invalid login account",
+		"username":   un,
 	})
-
 }
 
 // VIEWS

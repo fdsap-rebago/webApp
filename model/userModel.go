@@ -4,7 +4,7 @@ type TbUsers struct {
 	Uid       uint   `json:"uid" gorm:"primaryKey"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
-	Username  string `json:"username"`
+	Username  string `json:"username" gorm:"unique"`
 	Password  string `json:"password"`
 	InstiCode int    `json:"insti_code"`
 }

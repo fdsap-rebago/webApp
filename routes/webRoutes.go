@@ -14,5 +14,5 @@ func AppRoutes(app *fiber.App) {
 	userEndpoint := apiEndpoint.Group("/user")
 	userEndpoint.Get("/register", controller.ViewRegistration)
 	userEndpoint.Post("/save", controller.RegisterAccount)
-
+	userEndpoint.Post("/verify", controller.VerifyAccount)
 }

@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"time"
 	"webApp/controller"
+	"webApp/controller/util"
 	"webApp/routes"
 
 	"github.com/gofiber/fiber/v2"
@@ -22,6 +24,19 @@ func main() {
 	app.Static("/", "./template/css")
 	app.Static("/", "./template/js")
 	app.Static("/", "./template/images")
+
+	// Setup log file
+	logFileName := "./logs/insta-" + time.Now().Format("2006-01-02") + ".log"
+
+	file, err := util.OpenLogFile(logFileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
+	log.Println("Start of Entry After Re-run")
+	// set default log output to the 'new' file
+	defer file.Close()
 
 	// Configure application CORS
 	app.Use(cors.New(cors.Config{

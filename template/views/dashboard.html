@@ -1,7 +1,28 @@
 {{template "header" .}}
 <div class="container">
     <div class="container-fluid">
-        
+        <h1>{{.title}}</h1>
+        <h2>{{.username}}</h2>
+        <h3>{{.password}}</h3>
     </div>
 </div>
+
+
+{{if .statusCode}}
+<script>
+    Swal.fire({
+        position: 'top-center',
+        icon: '{{.iconDesc}}',
+        title: '{{.statusDesc}}',
+        showConfirmButton: false,
+        toast: true,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+</script>
+{{end}}
 {{template "footer" .}}

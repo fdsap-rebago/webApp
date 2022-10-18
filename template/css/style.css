@@ -3,8 +3,8 @@ a.no-underline {
     font-style: italic;
 }
 
-input#loginemail,
-#loginpassword {
+input#loginUsername,
+#loginPassword {
     box-shadow: none;
     border-top: none;
     border-left: none;
