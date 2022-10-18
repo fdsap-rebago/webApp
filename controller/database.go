@@ -16,7 +16,9 @@ var (
 )
 
 func PostgreSQLConnect(username, password, host, databaseName, port, sslMode, timeZone string) {
-	DBConn, Err = gorm.Open(postgres.Open(fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s", host, username, password, databaseName, port, sslMode, timeZone)), &gorm.Config{})
+
+	DBConn, Err = gorm.Open(postgres.Open(fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s", host, username, password, databaseName, port, sslMode, timeZone)),
+		&gorm.Config{})
 }
 
 func CreateConnection() {

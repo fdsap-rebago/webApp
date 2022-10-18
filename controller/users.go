@@ -104,12 +104,13 @@ func VerifyAccount(c *fiber.Ctx) error {
 	un := c.FormValue("username")
 	pw := c.FormValue("password")
 
-	log.Println(DBConn.Debug().Table("tbl_users").Where("username = ?", un).Find(&userModel))
+	log.Println("Verify Account Query:", DBConn.Debug().Table("tbl_users").Where("username = ?", un).Find(&userModel))
 
 	result := util.CheckPasswordHash(pw, userModel.Password)
 
 	if result {
 		return c.Render("dashboard", fiber.Map{
+			"page":       "Dashboard",
 			"iconDesc":   "success",
 			"title":      "DASHBOARD",
 			"statusCode": http.StatusOK,
@@ -124,6 +125,15 @@ func VerifyAccount(c *fiber.Ctx) error {
 		"statusCode": http.StatusUnauthorized,
 		"statusDesc": "Invalid login account",
 		"username":   un,
+	})
+}
+
+func UserLogout(c *fiber.Ctx) error {
+	return c.Render("login", fiber.Map{
+		"title":      "USER LOGIN",
+		"statusCode": "",
+		"iconDesc":   "",
+		"statusDesc": "",
 	})
 }
 
@@ -142,5 +152,61 @@ func ViewRegistration(c *fiber.Ctx) error {
 	return c.Render("registration", fiber.Map{
 		"title":        "USER REGISTRATION",
 		"institutions": instiModel,
+	})
+}
+
+func ViewDashboard(c *fiber.Ctx) error {
+	return c.Render("dashboard", fiber.Map{
+		"page":  "Dashboard",
+		"title": "DASHBOARD",
+	})
+}
+
+func ViewUpload(c *fiber.Ctx) error {
+	return c.Render("uploadfile", fiber.Map{
+		"page":  "Upload File",
+		"title": "UPLOAD FILE",
+	})
+}
+
+func ViewDelete(c *fiber.Ctx) error {
+	return c.Render("deletefile", fiber.Map{
+		"page":  "Delete File",
+		"title": "DELETE FILE",
+	})
+}
+
+func ViewReport(c *fiber.Ctx) error {
+	return c.Render("reportloan", fiber.Map{
+		"page":  "Report Loan",
+		"title": "REPORT LOAN",
+	})
+}
+
+func ViewClient(c *fiber.Ctx) error {
+	return c.Render("clientlist", fiber.Map{
+		"page":  "Client List",
+		"title": "CLIENT LIST",
+	})
+}
+
+func ViewCheckClient(c *fiber.Ctx) error {
+	return c.Render("checkclient", fiber.Map{
+		"page":  "Check Client",
+		"title": "CHECK CLIENT",
+	})
+}
+
+func ViewUserSetting(c *fiber.Ctx) error {
+	return c.Render("usersetting", fiber.Map{
+		"page":  "User Setting",
+		"title": "USER SETTING",
+	})
+}
+
+func ViewAuditLog(c *fiber.Ctx) error {
+	return c.Render("auditlog", fiber.Map{
+		"page":  "Audit Trails / Log",
+		"title": "AUDIT TRAILS / LOG",
 	})
 }
