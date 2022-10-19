@@ -26,12 +26,12 @@ func RegisterAccount(c *fiber.Ctx) error {
 
 	// Initiate Institutions
 	instiModel := []model.M_Institution{}
-	DBConn.Debug().Table("m_institution").Find(&instiModel)
+	util.DBConn.Debug().Table("m_institution").Find(&instiModel)
 
 	// Password not match
 	if pw != cpw {
 		instiModel := []model.M_Institution{}
-		DBConn.Debug().Table("m_institution").Find(&instiModel)
+		util.DBConn.Debug().Table("m_institution").Find(&instiModel)
 
 		return c.Render("registration", fiber.Map{
 			"iconDesc":     "error",
@@ -73,7 +73,7 @@ func RegisterAccount(c *fiber.Ctx) error {
 			InstiCode: cic,
 		}
 
-		result := DBConn.Debug().Table("tbl_users").Where("username = ?", un).FirstOrCreate(&userModel)
+		result := util.DBConn.Debug().Table("tbl_users").Where("username = ?", un).FirstOrCreate(&userModel)
 
 		if result.RowsAffected == 0 {
 			return c.Render("registration", fiber.Map{
@@ -104,7 +104,7 @@ func VerifyAccount(c *fiber.Ctx) error {
 	un := c.FormValue("username")
 	pw := c.FormValue("password")
 
-	log.Println("Verify Account Query:", DBConn.Debug().Table("tbl_users").Where("username = ?", un).Find(&userModel))
+	log.Println("Verify Account Query:", util.DBConn.Debug().Table("tbl_users").Where("username = ?", un).Find(&userModel))
 
 	result := util.CheckPasswordHash(pw, userModel.Password)
 
@@ -147,7 +147,7 @@ func ViewLogin(c *fiber.Ctx) error {
 func ViewRegistration(c *fiber.Ctx) error {
 	instiModel := []model.M_Institution{}
 
-	DBConn.Debug().Table("m_institution").Find(&instiModel)
+	util.DBConn.Debug().Table("m_institution").Find(&instiModel)
 
 	return c.Render("registration", fiber.Map{
 		"title":        "USER REGISTRATION",

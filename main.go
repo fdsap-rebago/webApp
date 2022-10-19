@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"time"
-	"webApp/controller"
 	"webApp/controller/util"
 	"webApp/routes"
 
@@ -14,7 +13,7 @@ import (
 
 func main() {
 
-	controller.CreateConnection()
+	util.CreateConnection()
 
 	app := fiber.New(fiber.Config{
 		Views: html.New("./template/views", ".html"),
