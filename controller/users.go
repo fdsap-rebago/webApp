@@ -162,51 +162,9 @@ func ViewDashboard(c *fiber.Ctx) error {
 	})
 }
 
-func ViewUpload(c *fiber.Ctx) error {
-	return c.Render("uploadfile", fiber.Map{
-		"page":  "Upload File",
-		"title": "UPLOAD FILE",
-	})
-}
-
-func ViewDelete(c *fiber.Ctx) error {
-	return c.Render("deletefile", fiber.Map{
-		"page":  "Delete File",
-		"title": "DELETE FILE",
-	})
-}
-
-func ViewReport(c *fiber.Ctx) error {
-	return c.Render("reportloan", fiber.Map{
-		"page":  "Report Loan",
-		"title": "REPORT LOAN",
-	})
-}
-
-func ViewClient(c *fiber.Ctx) error {
-	return c.Render("clientlist", fiber.Map{
-		"page":  "Client List",
-		"title": "CLIENT LIST",
-	})
-}
-
-func ViewCheckClient(c *fiber.Ctx) error {
-	return c.Render("checkclient", fiber.Map{
-		"page":  "Check Client",
-		"title": "CHECK CLIENT",
-	})
-}
-
 func ViewUserSetting(c *fiber.Ctx) error {
 	return c.Render("usersetting", fiber.Map{
 		"page":  "User Setting",
 		"title": "USER SETTING",
-	})
-}
-
-func ViewAuditLog(c *fiber.Ctx) error {
-	return c.Render("auditlog", fiber.Map{
-		"page":  "Audit Trails / Log",
-		"title": "AUDIT TRAILS / LOG",
 	})
 }
