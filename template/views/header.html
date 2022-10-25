@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/dashboard_style.css">
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <title>{{.title}}</title>
 </head>
 
@@ -32,38 +33,42 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse w-100 d-flex align-items-start" id="navbarSupportedContent">
                 <hr>
                 <ul class="navbar-nav w-100 d-flex flex-md-column text-start text-md-start px-2">
-                    <li class="nav-item border-bottom active">
+                    <li class="nav-item border-bottom active" id="dashboard">
                         <a href="/api/dashboard/dashboard_page" class="nav-link active"><i
                                 class="bi bi-speedometer"></i> Dashboard</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="upload">
                         <a href="/api/upload/upload_page" class="nav-link"><i class="bi bi-cloud-upload-fill"></i>
                             Upload File</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="delete">
                         <a href="/api/delete/delete_page" class="nav-link"><i class="bi bi-file-earmark-x-fill"></i>
                             Delete File</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="loan">
                         <a href="/api/loan/report_page" class="nav-link"><i class="bi bi-flag-fill"></i> Report Loan</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="client">
                         <a href="/api/client/client_page" class="nav-link"><i class="bi bi-person-lines-fill"></i>
                             Client List</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="check">
                         <a href="/api/client/check" class="nav-link"><i class="bi bi-person-check-fill"></i> Client
                             Check</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="setting">
                         <a href="/api/user/setting" class="nav-link"><i class="bi bi-gear-fill"></i> User Setting</a>
                     </li>
-                    <li class="nav-item border-bottom">
+                    <li class="nav-item border-bottom" id="audit">
                         <a href="/api/loan/audit_page" class="nav-link"><i class="bi bi-file-earmark-zip"></i> Audit
                             Trails / Log</a>
+                    </li>
+                    <li class="nav-item border-bottom" id="audit">
+                        <a href="/api/upload/upload_image" class="nav-link"><i class="bi bi-file-earmark-zip"></i> Upload
+                            Image</a>
                     </li>
                     <li class="nav-item pb-5">
                         <a id="logout" class="nav-link"><i class="bi bi-box-arrow-right"></i>
@@ -96,4 +101,4 @@
 
         </script>
         <!-- Page Content  -->
-        <main class="ps-0 ps-md-0 flex-grow-1">
+        <main class="ps-0 ps-md-0 flex-grow-1 overflow-auto">

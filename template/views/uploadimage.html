@@ -9,13 +9,22 @@
         </form>
     </div>
 </nav>
+<div class="container-fluid">
+    <form action="/api/upload/upload" method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <input class="form-control" type="file" id="uploadInput" name="imageSource">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+
 
 
 <!-- 
 JS SECTION 
 Modify this part if needed
 -->
-
 {{if .statusCode}}
 <script>
     Swal.fire({

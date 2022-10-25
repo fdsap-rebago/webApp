@@ -63,7 +63,6 @@ func RegisterAccount(c *fiber.Ctx) error {
 
 	} else {
 		hashPW, _ := util.HashPassword(pw)
-
 		// store data
 		userModel := model.TbUsers{
 			Firstname: fn,
@@ -128,6 +127,33 @@ func VerifyAccount(c *fiber.Ctx) error {
 	})
 }
 
+func VerifyForgotPassword(c *fiber.Ctx) error {
+	log.Println("Forgot Password")
+	// Get value from input tags
+	fn := c.FormValue("firstname")
+	ln := c.FormValue("lastname")
+	un := c.FormValue("username")
+	pw := c.FormValue("password")
+	cpw := c.FormValue("confirmPassword")
+
+	// Password not match
+	if pw != cpw {
+		instiModel := []model.M_Institution{}
+		util.DBConn.Debug().Table("m_institution").Find(&instiModel)
+
+		return c.Render("forgotpassword", fiber.Map{
+			"iconDesc":   "error",
+			"title":      "FORGOT PASSWORD",
+			"statusCode": http.StatusUnprocessableEntity,
+			"statusDesc": "Password not match",
+			"firstname":  fn,
+			"lastname":   ln,
+			"username":   un,
+		})
+
+	}
+	return nil
+}
 func UserLogout(c *fiber.Ctx) error {
 	return c.Render("login", fiber.Map{
 		"title":      "USER LOGIN",
@@ -166,5 +192,12 @@ func ViewUserSetting(c *fiber.Ctx) error {
 	return c.Render("usersetting", fiber.Map{
 		"page":  "User Setting",
 		"title": "USER SETTING",
+	})
+}
+
+func ViewForgotPassword(c *fiber.Ctx) error {
+	return c.Render("forgotpassword", fiber.Map{
+		"page":  "Update User Password",
+		"title": "FORGOT PASSWORD",
 	})
 }

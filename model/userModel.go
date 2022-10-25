@@ -13,3 +13,8 @@ type M_Institution struct {
 	InstiCode uint   `json:"insti_code"`
 	InstiDesc string `json:"insti_desc"`
 }
+
+type Uploaded_Images struct {
+	IMGID   int    `json:"img_id" gorm:"primaryKey"`
+	ImgData string `json:"img_data"`
+}
