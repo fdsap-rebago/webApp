@@ -15,6 +15,7 @@ type M_Institution struct {
 }
 
 type Uploaded_Images struct {
-	IMGID   int    `json:"img_id" gorm:"primaryKey"`
+	UserID  int    `json:"user_id"`
 	ImgData string `json:"img_data"`
+	ImgType string `json:"img_type"`
 }

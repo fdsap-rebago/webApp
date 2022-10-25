@@ -14,21 +14,23 @@ import (
 
 // CONTROLLER
 func ConvertToBase64(b []byte) string {
-	fmt.Println("b: ", b)
 	return base64.StdEncoding.EncodeToString(b)
 }
 
 func FileUpload(c *fiber.Ctx) error {
 
 	imgSrc, uploadErr := c.FormFile("imageSource")
+	imgSize := imgSrc.Size
+
+	fmt.Printf("IMAGE SIZE: %d", imgSize)
 	if uploadErr != nil {
 		return c.SendString("Error in FormFile")
 	}
-	imgPath := fmt.Sprintf("./template/images/%s", imgSrc.Filename)
-	c.SaveFile(imgSrc, fmt.Sprintf("./template/images/%s", imgSrc.Filename))
+
+	imgPath := fmt.Sprintf("./template/images/uploads/%s", imgSrc.Filename)
+	c.SaveFile(imgSrc, imgPath)
 	bytes, err := ioutil.ReadFile(imgPath)
 
-	fmt.Println("Bytes:", string(imgPath))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,18 +51,22 @@ func FileUpload(c *fiber.Ctx) error {
 
 	// Append the base64 encoded output
 	base64Encoding += ConvertToBase64(bytes)
-	fmt.Println("base64: ", base64Encoding)
-	// Print the full base64 representation of the image
-	fmt.Println(base64Encoding)
-
 	imgStruct := model.Uploaded_Images{
+		UserID:  1,
 		ImgData: base64Encoding,
+		ImgType: mimeType,
 	}
 
-	util.DBConn.Debug().Create(&imgStruct)
+	util.DBConn.Debug().Table("tbl_images").Create(&imgStruct)
 
-	return c.JSON(base64Encoding)
-
+	return c.Render("uploadimage", fiber.Map{
+		"page":       "Testing Upload Image File",
+		"iconDesc":   "success",
+		"imageData":  base64Encoding,
+		"title":      "UPLOAD IMAGE",
+		"statusCode": http.StatusOK,
+		"statusDesc": "Registration successful",
+	})
 }
 
 // VIEWS
