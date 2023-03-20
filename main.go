@@ -19,7 +19,7 @@ func main() {
 		Views: html.New("./template/views", ".html"),
 	})
 
-	// Load static files like CSS, Images & JavaScript
+	// Dito iloload ung path ng CSS,JS,IMAGES etc...
 	app.Static("/", "./template/css")
 	app.Static("/", "./template/js")
 	app.Static("/", "./template/images")
@@ -46,5 +46,5 @@ func main() {
 	// Declare & initialize logger
 	routes.AppRoutes(app)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":5020"))
 }

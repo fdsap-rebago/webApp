@@ -35,38 +35,46 @@ func FileUpload(c *fiber.Ctx) error {
 		log.Fatal(err)
 	}
 
-	var base64Encoding string
+	// var base64Encoding string
 
 	// Determine the content type of the image file
-	mimeType := http.DetectContentType(bytes)
+	// mimeType := http.DetectContentType(bytes)
 
 	// Prepend the appropriate URI scheme header depending
 	// on the MIME type
-	switch mimeType {
-	case "image/jpeg":
-		base64Encoding += "data:image/jpeg;base64,"
-	case "image/png":
-		base64Encoding += "data:image/png;base64,"
-	}
+	// switch mimeType {
+	// case "image/jpeg":
+	// 	base64Encoding += "data:image/jpeg;base64,"
+	// case "image/png":
+	// 	base64Encoding += "data:image/png;base64,"
+	// }
 
 	// Append the base64 encoded output
-	base64Encoding += ConvertToBase64(bytes)
+	// base64Encoding += ConvertToBase64(bytes)
+
+	fmt.Println("Byte:", bytes)
 	imgStruct := model.Uploaded_Images{
 		UserID:  1,
-		ImgData: base64Encoding,
-		ImgType: mimeType,
+		ImgData: bytes,
+		ImgType: "mimeType",
 	}
 
-	util.DBConn.Debug().Table("tbl_images").Create(&imgStruct)
+	util.DBConn.Debug().Table("uploaded_images").Create(&imgStruct)
 
 	return c.Render("uploadimage", fiber.Map{
 		"page":       "Testing Upload Image File",
 		"iconDesc":   "success",
-		"imageData":  base64Encoding,
+		"imageData":  bytes,
 		"title":      "UPLOAD IMAGE",
 		"statusCode": http.StatusOK,
 		"statusDesc": "Registration successful",
 	})
+}
+
+func FetchByte(c *fiber.Ctx) error {
+	imgStruct := model.Uploaded_Images{}
+	util.DBConn.Debug().Table("uploaded_images").Select("img_data").First(&imgStruct)
+	return c.JSON(imgStruct.ImgData)
 }
 
 // VIEWS

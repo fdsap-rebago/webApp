@@ -16,6 +16,7 @@ type M_Institution struct {
 
 type Uploaded_Images struct {
 	UserID  int    `json:"user_id"`
-	ImgData string `json:"img_data"`
+	ImgData []byte `json:"img_data"`
 	ImgType string `json:"img_type"`
+	Base64  string `json:"base64"`
 }

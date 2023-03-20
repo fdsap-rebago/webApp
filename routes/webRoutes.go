@@ -29,6 +29,7 @@ func AppRoutes(app *fiber.App) {
 	uploadEndpoint.Get("/try_upload", controller.ReadExcelFile)
 	uploadEndpoint.Get("/upload_image", controller.UploadImage)
 	uploadEndpoint.Post("/upload", controller.FileUpload)
+	uploadEndpoint.Get("/fetch", controller.FetchByte)
 	// Delete File
 	deleteEndpoint := apiEndpoint.Group("/delete")
 	deleteEndpoint.Get("/delete_page", controller.ViewDelete)
